@@ -13,6 +13,11 @@ stories:
       - intent: goodbye
       - action: utter_goodbye
 
+  - story: Pattern question
+    steps:
+      - intent: ask_pattern
+      - action: utter_ask_pattern    
+
   - story: ask for more info
     steps:
       - intent: request_info

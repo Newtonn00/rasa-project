@@ -7,7 +7,7 @@ pipeline:
 - name: CountVectorsFeaturizer             # Извлечение признаков по частоте слов
   analyzer: "char_wb"                      # Символьные N-граммы
   min_ngram: 1
-  max_ngram: 2     
+  max_ngram: 2
   # Уменьшены размеры N-грамм для ускорения
 
 # Подключение предобученной модели трансформера (BERT)
@@ -27,13 +27,19 @@ pipeline:
 
 - name: EntitySynonymMapper                 # Маппер синонимов сущностей
 - name: ResponseSelector                    # Минимальный выбор ответа
-  epochs: 256                            # Минимальное количество эпох обучения
+  epochs: 256
+- name: FallbackClassifier
+  threshold: 0.3
+  ambiguity_threshold: 0.1                      # Минимальное количество эпох обучения
 
 policies:
-  - name: MemoizationPolicy
-    max_history: 2                          # Минимальная история
-  - name: RulePolicy
-  - name: TEDPolicy
-    max_history: 2                          # Минимальное количество шагов в истории
-    epochs: 256                               # Минимальное количество эпох обучения
-    constrain_similarities: true 
+- name: MemoizationPolicy
+  max_history: 2                            # Минимальная история
+- name: RulePolicy
+  core_fallback_threshold: 0.3           # Порог, ниже которого действие fallback срабатывает
+  core_fallback_action_name: "action_default_fallback"
+- name: TEDPolicy
+  max_history: 5                            # Минимальное количество шагов в истории
+  epochs: 256                                 # Минимальное количество эпох обучения
+  constrain_similarities: true
+assistant_id: 20250219-223109-planar-planner
